@@ -264,6 +264,8 @@ def convertDiscs(passedArray, x, y):
         if board[neighbour_x][neighbour_y] != colour:
            
             disc_path = []
+            dirX = neighbour_x - x
+            dirY = neighbour_y - y
           
             while 0 <= neighbour_x < SIZE and 0 <= neighbour_y < SIZE:
                 disc_path.append([neighbour_x, neighbour_y])
@@ -278,8 +280,8 @@ def convertDiscs(passedArray, x, y):
                         convert_discs.append(node)
                     break
               
-                neighbour_x += neighbour_x - x
-                neighbour_y += neighbour_y - y
+                neighbour_x += dirX
+                neighbour_y += dirY
 
     # change discs
     for node in convert_discs:
