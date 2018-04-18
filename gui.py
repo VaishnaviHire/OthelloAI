@@ -1,11 +1,11 @@
-from tkinter import *
+from Tkinter import *
 from math import *
 from time import *
 from random import *
 from copy import deepcopy
 from moves import *
 from game_canvas import *
-from tkinter import *
+
 
 
 SIZE = 8

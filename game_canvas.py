@@ -1,5 +1,5 @@
 from copy import deepcopy
-from tkinter import *
+from Tkinter import *
 
 
 CANVAS_WIDTH = 500

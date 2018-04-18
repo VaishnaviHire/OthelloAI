@@ -1,20 +1,72 @@
 from copy import deepcopy
-from tkinter import *
+from Tkinter import *
 from math import *
 from time import *
 from random import *
 from game_canvas import *
+from gui import *
 
 SIZE = 8
 WHITE = 0
 BLACK = 1
 
+
+def count_different(board, player):
+  if player == BLACK:
+    colour = "black"
+    opponent = "white"
+  else:
+    colour = "white"
+    opponent = "black"
+  colour_num = 0
+  opponent_num = 0
+  for x in range(SIZE):
+    for y in range(SIZE):
+      if board[x][y] == colour:
+        colour_num+=1
+      if board[x][y] == opponent:
+        opponent_num+=1
+
+  return colour_num - opponent_num
+
+
+def mock_move(player, board, x, y):
+  if player == BLACK:
+    colour = "black"
+  else:
+    colour = "white"
+  temp_board = board
+  temp_board[x][y] = colour
+  temp_board = convertDiscs(temp_board, x, y)
+  result = count_different(temp_board, player)
+  return result
+
+def generate_valid_moves(player, board):
+  valid_moves = []
+  for x in range(SIZE):
+    for y in range(SIZE):
+      if valid(board, player, x, y):
+        valid_moves.append([x,y])
+  return valid_moves
+
+# calculate the mobility for opponent
+def mobility(board, player):
+  if player == BLACK:
+    opponent = WHITE
+  else:
+    opponent = BLACK
+  valid_moves = generate_valid_moves(opponent, board)
+  return len(valid_moves)
+
+
+
+
 #temporary poor hueristic
 def tempHeuristic(board, player):
     score = 0
-    corner_value = 30
-    adjacent_value = 5
-    side_value = 5
+    corner_value = 50
+    adjacent_value = 3
+    side_value = 3
     # Set player and opponent colours
     if player == BLACK:
         colour = "black"
@@ -22,7 +74,27 @@ def tempHeuristic(board, player):
     else:
         colour = "white"
         opponent = "black"
-  
+
+
+    # Basic hurisitc just use the number of pieces of the color they play on the board
+    # as an indicator for the quality of a position. This greedy evaluation function is
+    # derived from the final goal of the game: the player who has the most pieces wins. 
+    # But this only makes sense if you really can look ahead until the end of the game 
+
+    #
+    difference_score = count_different(board, player)
+
+
+    # A better criterion for determining a position is to count the number of moves a player can make: 
+    # the mobility is decisive in Reversi! If you only have a few moves, it's likely that your opponent 
+    # can play such that you are forced to make bad moves. Therefore, if your mobility is high, 
+    # the position is better for you than if it's low.
+
+    mobility_score = -1 * mobility(board, player)
+
+
+
+    # Advanced huristic about edges and corner condition
     for x in range(SIZE):
         for y in range(SIZE):
             heuristic_value = 1
@@ -62,7 +134,7 @@ def tempHeuristic(board, player):
                 score += heuristic_value
             elif board[x][y] == opponent:
                 score -= heuristic_value
-    return score
+    return score + difference_score + mobility_score
 
 
 #validity function
