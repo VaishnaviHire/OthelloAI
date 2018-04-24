@@ -82,7 +82,7 @@ def tempHeuristic(board, player):
     # But this only makes sense if you really can look ahead until the end of the game 
 
     #
-    difference_score = count_different(board, player)
+    difference_score = 4 * count_different(board, player)
 
 
     # A better criterion for determining a position is to count the number of moves a player can make: 
@@ -90,7 +90,7 @@ def tempHeuristic(board, player):
     # can play such that you are forced to make bad moves. Therefore, if your mobility is high, 
     # the position is better for you than if it's low.
 
-    mobility_score = -1 * mobility(board, player)
+    mobility_score = -5 * mobility(board, player)
 
 
 
