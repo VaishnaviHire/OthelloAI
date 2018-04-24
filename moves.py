@@ -1,5 +1,5 @@
 from copy import deepcopy
-from Tkinter import *
+from tkinter import *
 from math import *
 from time import *
 from random import *

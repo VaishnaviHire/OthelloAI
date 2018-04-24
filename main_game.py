@@ -1,4 +1,4 @@
-from Tkinter import *
+from tkinter import *
 from gui import *
 from moves import *
 

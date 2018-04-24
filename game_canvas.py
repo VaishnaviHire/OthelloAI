@@ -1,12 +1,12 @@
 from copy import deepcopy
-from Tkinter import *
+from tkinter import *
 
 
 CANVAS_WIDTH = 500
 CANVAS_HEIGHT = 600
 
 
-#Creates a canvas
+#Creates a canvas of the game
 game = Tk()
 screen = Canvas(game, width=CANVAS_WIDTH, height=CANVAS_HEIGHT, background="gray12", highlightthickness=0)
 screen.pack()

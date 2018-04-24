@@ -1,4 +1,4 @@
-from Tkinter import *
+from tkinter import *
 from math import *
 from time import *
 from random import *
@@ -33,7 +33,8 @@ class GameBoard:
         self.oldboard = self.board
 
     
-
+# updates the state of game after every move
+# flips the discs on every move. 
     def update(self):
         # Clear the board
         screen.delete("valids")
@@ -53,11 +54,10 @@ class GameBoard:
         for x in range(SIZE):
             for y in range(SIZE):
                 
-                # Could replace the circles with images later, if I want
+             
                 if self.board[x][y] != self.oldboard[x][y] and self.board[x][y] == "white":
                     screen.delete("{0}-{1}".format(x, y))
-                    # 42 is width of disc so 21 is half of that
-                    # Shrinking
+             
                     print ("board", self.board[x][y])
                     print("oldboard", self.oldboard[x][y])
                   
@@ -92,11 +92,10 @@ class GameBoard:
                         screen.create_oval(68 + 50 * x, 68 + 50 * y, 32 + 50 * (x + 1), 32 + 50 * (y + 1),
                                            tags="valids", fill="yellow", outline="#008000")
 
+        # Function for AI agent to make a move.
         if not self.won:
-            # Draw the scoreboard and update the screen
             self.scoreBoard()
             screen.update()
-            # If the computer is AI, make a move
             if self.player == BLACK:
                 startTime = time()
                 self.oldboard = self.board
@@ -117,9 +116,12 @@ class GameBoard:
                 # Player must pass?
                 self.noValidMovesRemaining()
         else:
-             screen.create_text(250, 550, anchor="c", font=("Consolas", 15), text="something")
+             screen.create_text(250, 550, anchor="c", font=("Consolas", 15), text="Game won")
             # tkinter.messagebox.showinfo("Title", "a Tk MessageBox " )
 
+
+
+# function to make game moves
     def makeMove(self, x, y):
         global nodes
         # Move and update screen
@@ -131,7 +133,6 @@ class GameBoard:
         self.player = 1 - self.player
         self.update()
 
-        # Check if ai must pass
         self.noValidMovesRemaining()
         self.update()
 
@@ -168,7 +169,7 @@ class GameBoard:
 
         
 
-
+    # function to determine if a player can play his turn or needs to pass it to its opponent
     def noValidMovesRemaining(self):
         passTurn = True
         for x in range(SIZE):
@@ -185,7 +186,10 @@ class GameBoard:
         else:
             self.noValidMoves = False
 
-     #Function needs major changes - ignore for now
+
+     #Alpha beta prunning function .
+     # It creates a mock game upto a certain depth i.e it traverse the possible moves upto a given depth 
+     # and uses alpha beta prunning to optimize the traversal
     def alphaBeta(self, node, depth, alpha, beta, maxim):
         global nodes
         nodes += 1
@@ -199,6 +203,7 @@ class GameBoard:
                     boards.append(test)
                     choices.append([x, y])
 
+        # Every combination on the board has a value which can be determined by heuristic function
         if depth == 0 or len(choices) == 0:
             return ([tempHeuristic(node, maxim), node])
 
@@ -210,6 +215,7 @@ class GameBoard:
                 boardValue = self.alphaBeta(brd, depth - 1, alpha, beta, 0)[0]
                 if boardValue > v:
                     v = boardValue
+                    
                     opt_board = brd
                     opt_choice = choices[boards.index(brd)]
                 alpha = max(alpha, v)
@@ -234,11 +240,9 @@ class GameBoard:
 
 
 
-
+# function to determine which discs to convert
 def convertDiscs(passedArray, x, y):
-    # Must copy the passedArray so we don't alter the original
     board = deepcopy(passedArray)
-    # Set colour and set the moved location to be that colour
     if gameboard.player == WHITE:
         colour = "white"
 
@@ -256,7 +260,7 @@ def convertDiscs(passedArray, x, y):
     # Which discs to convert
     convert_discs = []
 
-    #find joining line
+    #Position of the discs to be flipped
     for n in neighbours:
         neighbour_x = n[0]
         neighbour_y = n[1]
@@ -300,11 +304,10 @@ def playGame():
     restart()
     gameboard = 0
 
-    # Draw the background
     gridBoard()
 
-    # Create the board and update it
     gameboard = GameBoard()
+    #Update gameboard on every change
     gameboard.update()
 
 def keyHandle(event):
@@ -330,6 +333,8 @@ def gridBoard():
         screen.create_line(line_spacing, GRID_COLUMN, line_spacing, GRID_ROW, fill="#111")
 
 
+
+# functio to hadle button clicks
 def clickHandle(event):
     global depth
     x_pointer = event.x
@@ -357,13 +362,14 @@ def clickHandle(event):
                 playGame()
        
             elif 180 <= x_pointer <= 310:
-                depth = 4
+                depth = 3
                 playGame()
             
             elif 335 <= x_pointer <= 465:
-                depth = 6
+                depth = 5
                 playGame()
 
+#function to start the game
 def runGame():
    
     
@@ -388,12 +394,12 @@ def runGame():
 
     screen.update()
 
-
+#function to create white discs
 def create_white_discs(x,y,tag_name):
     screen.create_oval(54 + 50 * x, 54 + 50 * y, 96 + 50 * x, 96 + 50 * y,
                                        tags=tag_name, fill="#fff", outline="#aaa")
 
-
+#function to create black discs
 def create_black_discs(x,y,tag_name):
     screen.create_oval(54 + 50 * x, 54 + 50 * y, 96 + 50 * x, 96 + 50 * y,
                                        tags=tag_name, fill="#111", outline="#000")
