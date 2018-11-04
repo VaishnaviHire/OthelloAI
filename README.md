@@ -24,10 +24,12 @@ h.	At the end of the game the number of discs on the board for each player is co
 
 a.	Download and install Python3
 
-b.	Open folder OthelloAI
+b.  Clone repo https://github.com/VaishnaviHire/OthelloAI
 
-c.	There are 4 python files : main-game.py, game_cavas.py, gui.py and moves.py
+c.	Open folder OthelloAI
 
-d.	Run file main-game.py
+d.	There are 4 python files : main-game.py, game_cavas.py, gui.py and moves.py
 
-e.	Choose a game level to begin the game
+e.	Run file main-game.py
+
+f.	Choose a game level to begin the game
